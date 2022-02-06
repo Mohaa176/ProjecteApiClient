@@ -34,7 +34,7 @@ namespace Projecte
         }
         private async void refresh()
         {
-            listbox_1.ItemsSource = await api.GetUsersAsync();
+            listbox_1.ItemsSource = await api.GetResponsablesAsync();
         }
        
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -49,7 +49,7 @@ namespace Projecte
             responsable oresp = new responsable();
             oresp.Name = nom_entrat.Text;
             await api.AddAsync(oresp);
-            listbox_1.ItemsSource = await api.GetUsersAsync();
+            listbox_1.ItemsSource = await api.GetResponsablesAsync();
 
 
             /*   try

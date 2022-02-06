@@ -38,9 +38,11 @@ namespace Projecte
             refresh();
         }
 
+
+
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            
         }
 
         private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
@@ -118,6 +120,8 @@ namespace Projecte
             //textbox_1.ItemsSource = await api.GetUsersAsync(); //textbox_2.ItemsSource = TascaService.GetAll("to do");
             //textbox_2.ItemsSource = await api.GetUsersAsync();
             //textbox_3.ItemsSource = await api.GetUsersAsync();
+
+            textbox_1.ItemsSource = await api.GetTascasAsync();
         }
 
         private void button_endarrere_Click(object sender, RoutedEventArgs e)

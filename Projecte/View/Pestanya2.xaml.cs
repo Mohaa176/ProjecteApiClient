@@ -13,7 +13,7 @@ using System.Windows.Shapes;
 using Projecte.Model;
 using Projecte.APIClient;
 using Projecte.Entity;
-
+using Projecte;
 
 
 
@@ -25,11 +25,14 @@ namespace Projecte
     public partial class Pestanya2 : Window
     {
         MainWindow mainWindow;
-       // tasca edit;
+        UsersApiClient api;
+        // tasca edit;
         //UsersApiClient api;
         public Pestanya2(MainWindow mw, Tasca edit)
         {
             InitializeComponent();
+            api = new UsersApiClient();
+            refresh();
 
             if (edit != null)
             {
@@ -47,35 +50,41 @@ namespace Projecte
             
 
             mainWindow = mw;
-            mainWindow.refresh();
+            
 
-            //combobox.ItemsSource = ResponsableService.GetAll();
+           // combobox.ItemsSource = await api.GetUsersAsync();
 
         }
+        private async void refresh()
+        {
+            
+            combobox.ItemsSource = await api.GetResponsablesAsync();
+        }
 
-        private  void txt_afegirbuto_Click(object sender, RoutedEventArgs e)
+        private async  void txt_afegirbuto_Click( object sender, RoutedEventArgs e)
         {
             Tasca oresp = new Tasca();
             oresp.ID = txt_id.CaretIndex;
             oresp.Name = txt_name.Text;
             responsable res = (responsable)combobox.SelectedItem;
-            //oresp.ResponsableTasca = res.Name;
+          //  oresp.ResponsableTasca = res.Name;
             oresp.Descripcio = txt_descripció.Text;
             oresp.Data = DateTime.Parse(txt_data.Text);
             oresp.Data1 = DateTime.Parse(txt_data_1.Text);
             oresp.Estat = "todo";
-            //await api.GetUserAsync(oresp);
-            mainWindow.refresh();
-
-            txt_id.Clear();
-            txt_name.Clear();
+            await api.AddAsync(oresp);
+           
+            // mainWindow.refresh();
+            refresh();
+           txt_id.Clear();
+           txt_name.Clear();
             txt_descripció.Clear();
 
-       
-            mainWindow.refresh();
+            refresh();
+            //mainWindow.refresh();
+            combobox.ItemsSource = await api.GetResponsablesAsync();
 
-
-            this.Close();
+            //this.Close();
         }
         
         public void TextBox_txt_id(object sender, RoutedEventArgs e)
@@ -103,5 +112,9 @@ namespace Projecte
             tb.GotFocus -= TextBox_txt_data;
         }
 
+        private void listbox_1_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+
+        }
     }
 }

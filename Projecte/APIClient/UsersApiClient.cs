@@ -70,7 +70,7 @@ namespace Projecte.APIClient
         /// Obté una llista de tots els usuaris de la base de dades
         /// </summary>
         /// <returns></returns>
-        public async Task<List<responsable>> GetUsersAsync()
+        public async Task<List<responsable>> GetResponsablesAsync()
         {
             List<responsable> responsables = new List<responsable>();
 
@@ -119,12 +119,54 @@ namespace Projecte.APIClient
             }
         }
 
+        public async Task<List<Tasca>> GetTascasAsync()
+        {
+            List<Tasca> tasques = new List<Tasca>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ServidorApi);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Enviem una petició GET al endpoint /users}
+                HttpResponseMessage response = await client.GetAsync("Tasca");
+                if (response.IsSuccessStatusCode)
+                {
+                    //Obtenim el resultat i el carreguem al objecte llista d'usuaris
+                    tasques = await response.Content.ReadAsAsync<List<Tasca>>();
+
+                    response.Dispose();
+                }
+                else
+                {
+                    //TODO: que fer si ha anat malament? retornar null? missatge?
+
+                }
+            }
+            return tasques;
+        }
+
+        public async Task AddAsync(Tasca nom)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ServidorApi);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Enviem una petició POST al endpoint /users}
+                HttpResponseMessage response = await client.PostAsJsonAsync("Tasca", nom);
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
         /// <summary>
         /// Modificar un usuari
         /// </summary>
         /// <param name="user">Usuari que volem modificar</param>
         /// <returns></returns>
-        public async Task UpdateAsync(responsable nom)
+        public async Task UpdateAsync(Tasca nom)
         {
             using (var client = new HttpClient())
             {
@@ -133,7 +175,7 @@ namespace Projecte.APIClient
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Enviem una petició PUT al endpoint /users/Id
-                HttpResponseMessage response = await client.PutAsJsonAsync($"api/responsable/{nom.ID}", nom);
+                HttpResponseMessage response = await client.PutAsJsonAsync($"{nom.ID}", nom);
                 response.EnsureSuccessStatusCode();
             }
         }

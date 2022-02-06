@@ -8,6 +8,8 @@
         Title="Pestanya2" Height="450" Width="800">
     <Grid>
 
+
+
         <TextBox x:Name="txt_id" GotFocus="TextBox_txt_id" HorizontalAlignment="Left" Height="28" Margin="50,153,0,0" Text="Entra un ID..." TextWrapping="Wrap" VerticalAlignment="Top" Width="214"/>
         <TextBox x:Name="txt_descripció" GotFocus="TextBox_txt_descripció" HorizontalAlignment="Left" Height="26" Margin="50,186,0,0" Text="Descripció..." TextWrapping="Wrap" VerticalAlignment="Top" Width="214"/>
         <DatePicker Name="txt_data" SelectedDateFormat="Short" Margin="319,134,267,252" FirstDayOfWeek="Monday" Text="Data creació.."/>

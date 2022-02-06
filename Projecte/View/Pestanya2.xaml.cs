@@ -74,7 +74,7 @@ namespace Projecte
             oresp.Estat = "todo";
             await api.AddAsync(oresp);
            
-            // mainWindow.refresh();
+             mainWindow.refresh();
             refresh();
            txt_id.Clear();
            txt_name.Clear();

@@ -29,6 +29,7 @@ namespace Projecte
 
         //MainWindow mainWindow;
        UsersApiClient api;
+       
 
         public MainWindow()
         {
@@ -82,20 +83,21 @@ namespace Projecte
 
         private async void Button_Click1(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Segur que vols eliminar la tasca?", Convert.ToString(MessageBoxButton.YesNo));
-            
+            if(MessageBox.Show("¿Eliminar usuario seleccionado?", "Eliminar", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+
+
             if (textbox_1.SelectedItem!=null)
             {
                 int index = textbox_1.SelectedIndex;
                 Tasca tb = (Tasca)textbox_1.Items[index];
-                await api.DeleteAsync(tb.ID);
+                await api.DeleteTascaAsync(tb.ID);
             }
 
             if (textbox_2.SelectedItem != null)
             {
                 int index = textbox_2.SelectedIndex;
                 Tasca tb = (Tasca)textbox_2.Items[index];
-                await api.DeleteAsync(tb.ID);
+                await api.DeleteTascaAsync(tb.ID);
             }
 
 
@@ -103,7 +105,7 @@ namespace Projecte
             {
                 int index = textbox_3.SelectedIndex;
                 Tasca tb = (Tasca)textbox_3.Items[index];
-                await api.DeleteAsync(tb.ID);
+                await api.DeleteTascaAsync(tb.ID);
             }
 
             refresh();
@@ -121,29 +123,49 @@ namespace Projecte
             //textbox_2.ItemsSource = await api.GetUsersAsync();
             //textbox_3.ItemsSource = await api.GetUsersAsync();
 
-            textbox_1.ItemsSource = await api.GetTascasAsync();
+            
+            textbox_1.ItemsSource = await api.GetTascatodoAsync();
+            textbox_2.ItemsSource = await api.GetTascadoingAsync();
+            textbox_3.ItemsSource = await api.GetTascadoneAsync();
         }
 
-        private void button_endarrere_Click(object sender, RoutedEventArgs e)
+        private async void button_endarrere_Click(object sender, RoutedEventArgs e)
         {
-            int index = textbox_2.SelectedIndex;
-            Tasca tb = (Tasca)textbox_2.Items[index];
-            
-            //TascaService ts = new TascaService(); //DONA ERROR
-           // ts.Update(tb, "todo");
-            refresh();
-        }
+            try
+            {
+                int index = textbox_2.SelectedIndex;
+                Tasca tb = (Tasca)textbox_2.Items[index];
 
-        private void button_endavant_Click(object sender, RoutedEventArgs e)
+                tb.Estat = "todo";
+                await api.UpdateAsync(tb);
+                refresh();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show("No puedes hacer esto crack", "Error");
+            }
+        
+
+    }
+
+        private async void button_endavant_Click(object sender, RoutedEventArgs e)
         {
-            int index = textbox_1.SelectedIndex;
-            Tasca tb = (Tasca)textbox_1.Items[index];
-          
-           // TascaService ts = new TascaService();
-           // ts.Update(tb,"doing");
-            refresh();
 
-            
+            try
+            {
+                int index = textbox_1.SelectedIndex;
+                Tasca tb = (Tasca)textbox_1.Items[index];
+
+                tb.Estat = "doing";
+                await api.UpdateAsync(tb);
+                refresh();
+            }
+
+            catch (Exception)
+            {
+                MessageBox.Show("No puedes hacer esto crack", "Error");
+            }
+
 
         }
 
@@ -175,24 +197,41 @@ namespace Projecte
             refresh();
         }
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
+        private async void Button_Click_2(object sender, RoutedEventArgs e)
         {
-            int index = textbox_3.SelectedIndex;
-            Tasca tb = (Tasca)textbox_3.Items[index];
-           
-            //TascaService ts = new TascaService();
-            //ts.Update(tb, "doing");
-            refresh();
+            try
+            {
+                int index = textbox_3.SelectedIndex;
+                Tasca tb = (Tasca)textbox_3.Items[index];
+
+                tb.Estat = "doing";
+                await api.UpdateAsync(tb);
+                refresh();
+            }
+
+            catch (Exception)
+            {
+                MessageBox.Show("No puedes hacer esto crack", "Error");
+            }
         }
 
-        private void button_endavant2_Click(object sender, RoutedEventArgs e)
+        private  async void button_endavant2_Click(object sender, RoutedEventArgs e)
         {
-            int index = textbox_2.SelectedIndex;
-            Tasca tb = (Tasca)textbox_2.Items[index];
-            
-           // TascaService ts = new TascaService();
-           // ts.Update(tb, "done");
-            refresh();
+            try {
+
+
+                int index = textbox_2.SelectedIndex;
+                Tasca tb = (Tasca)textbox_2.Items[index];
+
+                tb.Estat = "done";
+                await api.UpdateAsync(tb);
+                refresh();
+            }
+
+             catch (Exception)
+            {
+                MessageBox.Show("No puedes hacer esto crack", "Error");
+            }
         }
     }
 

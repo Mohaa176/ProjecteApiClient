@@ -16,6 +16,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Projecte.Model;
 using Projecte.APIClient;
+using Projecte.Entity;
 
 
 
@@ -29,11 +30,14 @@ namespace Projecte
     {
         UsersApiClient api;
         Tasca otasca;
-        public editarr(MainWindow mw, Tasca editar)
+        responsable res;
+        public editarr(MainWindow mw, Tasca editar )
         {
             InitializeComponent();
-            
+            api = new UsersApiClient();
             this.DataContext = editar;
+            
+            refresh();
 
             if (editar != null)
             {
@@ -43,13 +47,23 @@ namespace Projecte
                 txt_descripció.Text = editar.Descripcio;
                 txt_data.SelectedDate = editar.Data;
                 txt_data_1.SelectedDate = editar.Data1;
-                //  combobox.SelectedItem = edit.
+             //   combobox.ItemsSource =
 
             }
+
+
+
+            otasca = editar;
 
            // combobox.ItemsSource = ResponsableService.GetAll();
            
 
+        }
+
+        private async void refresh()
+        {
+
+            combobox.ItemsSource = await api.GetResponsablesAsync();
         }
 
         public void TextBox_txt_id(object sender, RoutedEventArgs e)
@@ -81,14 +95,15 @@ namespace Projecte
         {
             try
             {
-               // await api.UpdateAsync(otasca);
-                
+                await api.UpdateAsync(otasca);
+                //await api.UpdateAsyncrespo(res);
                 this.Close();
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message);
             }
+            this.Close();
         }
 /*
         public async void refresh()

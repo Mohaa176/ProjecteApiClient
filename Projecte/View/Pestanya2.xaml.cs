@@ -80,11 +80,11 @@ namespace Projecte
            txt_name.Clear();
             txt_descripció.Clear();
 
-            refresh();
-            //mainWindow.refresh();
-            combobox.ItemsSource = await api.GetResponsablesAsync();
+           // refresh();
+            mainWindow.refresh();
+         //   combobox.ItemsSource = await api.GetResponsablesAsync();
 
-            //this.Close();
+            this.Close();
         }
         
         public void TextBox_txt_id(object sender, RoutedEventArgs e)

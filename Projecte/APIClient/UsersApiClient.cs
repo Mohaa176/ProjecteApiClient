@@ -29,7 +29,7 @@ namespace Projecte.APIClient
         /// </summary>
         /// <param name="Id">Codi d'usuari</param>
         /// <returns>Usuari o null si no el troba</returns>
-            public async Task<Tasca> GetUserAsync(int ID)
+            public async Task<Tasca> GettascaAsync()
             {
             Tasca taska = new Tasca();
 
@@ -40,8 +40,8 @@ namespace Projecte.APIClient
                     client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                     //Enviem una petició GET al endpoint /users/{Id}
-                    HttpResponseMessage response = await client.GetAsync($"resposable/{ID}");
-                    if (response.IsSuccessStatusCode)
+                    HttpResponseMessage response = await client.GetAsync("Tasca?estat=todo");
+                    if (response.IsSuccessStatusCode) 
                     {
                         //Reposta 204 quan no ha trobat dades
                         if (response.StatusCode == System.Net.HttpStatusCode.NoContent)
@@ -119,7 +119,7 @@ namespace Projecte.APIClient
             }
         }
 
-        public async Task<List<Tasca>> GetTascasAsync()
+        public async Task<List<Tasca>> GetTascadoneAsync()
         {
             List<Tasca> tasques = new List<Tasca>();
 
@@ -130,7 +130,7 @@ namespace Projecte.APIClient
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Enviem una petició GET al endpoint /users}
-                HttpResponseMessage response = await client.GetAsync("Tasca");
+                HttpResponseMessage response = await client.GetAsync($"Tasca?estat=done") ;
                 if (response.IsSuccessStatusCode)
                 {
                     //Obtenim el resultat i el carreguem al objecte llista d'usuaris
@@ -146,6 +146,68 @@ namespace Projecte.APIClient
             }
             return tasques;
         }
+
+        public async Task<List<Tasca>> GetTascatodoAsync()
+        {
+            List<Tasca> tasques = new List<Tasca>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ServidorApi);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Enviem una petició GET al endpoint /users}
+                HttpResponseMessage response = await client.GetAsync($"Tasca?estat=todo");
+                if (response.IsSuccessStatusCode)
+                {
+                    //Obtenim el resultat i el carreguem al objecte llista d'usuaris
+                    tasques = await response.Content.ReadAsAsync<List<Tasca>>();
+
+                    response.Dispose();
+                }
+                else
+                {
+                    //TODO: que fer si ha anat malament? retornar null? missatge?
+
+                }
+            }
+            return tasques;
+        }
+
+        public async Task<List<Tasca>> GetTascadoingAsync()
+        {
+            List<Tasca> tasques = new List<Tasca>();
+
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ServidorApi);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Enviem una petició GET al endpoint /users}
+                HttpResponseMessage response = await client.GetAsync($"Tasca?estat=doing");
+                if (response.IsSuccessStatusCode)
+                {
+                    //Obtenim el resultat i el carreguem al objecte llista d'usuaris
+                    tasques = await response.Content.ReadAsAsync<List<Tasca>>();
+
+                    response.Dispose();
+                }
+                else
+                {
+                    //TODO: que fer si ha anat malament? retornar null? missatge?
+
+                }
+            }
+            return tasques;
+        }
+
+
+
+
+
+
 
         public async Task AddAsync(Tasca nom)
         {
@@ -175,7 +237,21 @@ namespace Projecte.APIClient
                 client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
 
                 //Enviem una petició PUT al endpoint /users/Id
-                HttpResponseMessage response = await client.PutAsJsonAsync($"{nom.ID}", nom);
+                HttpResponseMessage response = await client.PutAsJsonAsync($"Tasca/{nom.ID}", nom);
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
+        public async Task UpdateAsyncrespo(responsable nom)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ServidorApi);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Enviem una petició PUT al endpoint /users/Id
+                HttpResponseMessage response = await client.PutAsJsonAsync($"responsable/{nom.ID}", nom);
                 response.EnsureSuccessStatusCode();
             }
         }
@@ -196,6 +272,20 @@ namespace Projecte.APIClient
 
                 //Enviem una petició DELETE al endpoint /users/Id
                 HttpResponseMessage response = await client.DeleteAsync($"responsable/{ID}");
+                response.EnsureSuccessStatusCode();
+            }
+        }
+
+        public async Task DeleteTascaAsync(int ID)
+        {
+            using (var client = new HttpClient())
+            {
+                client.BaseAddress = new Uri(ServidorApi);
+                client.DefaultRequestHeaders.Accept.Clear();
+                client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                //Enviem una petició DELETE al endpoint /users/Id
+                HttpResponseMessage response = await client.DeleteAsync($"Tasca/{ID}");
                 response.EnsureSuccessStatusCode();
             }
         }
